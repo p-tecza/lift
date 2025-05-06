@@ -1,14 +1,16 @@
 package p.tecza.dcnds.contollers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import p.tecza.dcnds.security.VirusScanService;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,11 @@ public class FileUploadController {
     this.virusScanService = virusScanService;
   }
 
+  @GetMapping
+  public String test(){
+    return "ok";
+  }
+
   @PostMapping("/upload")
   public ResponseEntity<String> handleFileUpload(@RequestParam("files") List<MultipartFile> files) {
     if (files == null || files.isEmpty()) {
@@ -33,26 +40,25 @@ public class FileUploadController {
       // Tu możesz zapisać plik na dysk lub dalej przetworzyć
 
       files.forEach(file -> {
-        if(!this.virusScanService.isFileNotInfected(file)) {
+        if (!this.virusScanService.isFileNotInfected(file)) {
           corruptedFiles.add(file.getOriginalFilename());
         }
       });
 
-      if(!corruptedFiles.isEmpty()) {
+      if (!corruptedFiles.isEmpty()) {
         log.warn("Some files did not pass AV scanning: {}", corruptedFiles);
       }
 
-      //TODO tutaj
+      for (MultipartFile file : files) {
+        String fileName = file.getOriginalFilename();
+        byte[] bytes = file.getBytes();
 
-      String fileName = file.getOriginalFilename();
-      byte[] bytes = file.getBytes();
-
-      // Na przykład zapis do lokalnego folderu "uploads"
-      Path path = Paths.get("uploads/" + fileName);
-      Files.createDirectories(path.getParent()); // tworzy folder, jeśli nie istnieje
-      Files.write(path, bytes);
-
-      return ResponseEntity.ok("Plik " + fileName + " został przesłany pomyślnie.");
+        // Na przykład zapis do lokalnego folderu "uploads"
+        Path path = Paths.get("uploads/" + fileName);
+        Files.createDirectories(path.getParent()); // tworzy folder, jeśli nie istnieje
+        Files.write(path, bytes);
+      }
+      return ResponseEntity.ok("Successfully uploaded all files.");
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body("Wystąpił błąd przy zapisie pliku: " + e.getMessage());
