@@ -16,18 +16,13 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/api/file")
 public class FileUploadController {
 
   private final VirusScanService virusScanService;
 
   public FileUploadController(VirusScanService virusScanService) {
     this.virusScanService = virusScanService;
-  }
-
-  @GetMapping
-  public String test(){
-    return "ok";
   }
 
   @PostMapping("/upload")
