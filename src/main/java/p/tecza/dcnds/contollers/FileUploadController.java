@@ -25,6 +25,8 @@ public class FileUploadController {
     this.virusScanService = virusScanService;
   }
 
+  //TODO zacznij od parsowania plików EML (może jakiś connector do skrzynki pocztowej spróbować zrobić?)
+
   @PostMapping("/upload")
   public ResponseEntity<String> handleFileUpload(@RequestParam("files") List<MultipartFile> files) {
     if (files == null || files.isEmpty()) {

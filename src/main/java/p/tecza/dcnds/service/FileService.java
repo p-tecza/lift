@@ -1,4 +1,4 @@
-package p.tecza.dcnds;
+package p.tecza.dcnds.service;
 
 import org.springframework.stereotype.Service;
 import p.tecza.dcnds.model.TextTicket;

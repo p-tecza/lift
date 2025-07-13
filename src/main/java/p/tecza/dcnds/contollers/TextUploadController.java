@@ -1,39 +1,29 @@
 package p.tecza.dcnds.contollers;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import p.tecza.dcnds.FileService;
-import p.tecza.dcnds.infrastructure.TicketMapper;
+import p.tecza.dcnds.service.FileService;
 import p.tecza.dcnds.model.TextTicket;
-import p.tecza.dcnds.model.TicketModel;
+import p.tecza.dcnds.service.TicketUploadService;
 
 import java.io.IOException;
-import java.util.UUID;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/text")
+@RequiredArgsConstructor
 public class TextUploadController {
 
-  private final FileService fileService;
-  @Autowired
-  public TextUploadController(FileService fileService) {
-    this.fileService = fileService;
-  }
+  private final TicketUploadService ticketUploadService;
+
 
   @PostMapping("/upload")
   public ResponseEntity<String> handlePlainTextUpload(@RequestBody TextTicket ticketText) {
-    if (ticketText == null) {
-      return ResponseEntity.badRequest().body("Zawartosc zgloszenia = null");
-    }
-    try {
-      this.fileService.saveToFile(ticketText);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    return ResponseEntity.ok("ok");
+    String res = this.ticketUploadService.handlePlainTextTicketUpload(ticketText);
+    return ResponseEntity.of(Optional.of(res));
   }
 
 }
