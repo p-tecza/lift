@@ -12,7 +12,7 @@ public interface TicketMapper {
   @Insert("""
     INSERT INTO TICKET (message_uuid, subject, message, sender_email)
     VALUES (
-    #{ticket.messageUuid},
+    #{ticket.id},
     #{ticket.subject},
     #{ticket.message},
     #{ticket.senderEmail}

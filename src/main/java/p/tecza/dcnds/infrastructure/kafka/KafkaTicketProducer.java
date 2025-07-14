@@ -17,15 +17,13 @@ public class KafkaTicketProducer {
 
   private final KafkaTemplate<String, TicketModel> kafkaTemplate;
 
-  //todo dlaczego zawsze tutaj publishuje tylko na jedną partycje?
-
   public void publishTicket(TicketModel ticket) {
     CompletableFuture<SendResult<String, TicketModel>> future =
-      this.kafkaTemplate.send("it-tickets", ticket);
+      this.kafkaTemplate.send("it-tickets", ticket.getId(), ticket);
 
     future.whenComplete((result, ex) -> {
       if (ex == null) {
-        log.info("Message has been sent to partition: {}, offset: {}",
+        log.info("[KAFKA-PRODUCER] Message has been sent to partition: {}, offset: {}",
           result.getRecordMetadata().partition(),
           result.getRecordMetadata().offset());
       }

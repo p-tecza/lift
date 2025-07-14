@@ -9,9 +9,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class TicketModel {
+public class TicketClassificationResult {
   private String id;
-  private String subject;
-  private String message;
-  private String senderEmail;
+  private String error;
+  private Classification result;
 }

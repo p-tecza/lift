@@ -21,7 +21,7 @@ public class FileService {
     Files.createDirectories(path.getParent());
 
     String content = String.format(
-      "Email: %s%nTemat: %s%nTreść: %s%n",
+      "Email: %s%nSubject: %s%nMessage: %s%n",
       ticket.getEmail(),
       ticket.getSubject(),
       ticket.getMessage()
