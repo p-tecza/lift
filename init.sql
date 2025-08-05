@@ -34,34 +34,33 @@ CREATE TABLE IF NOT EXISTS TICKET_CLASSIFICATION
     FOREIGN KEY (message_uuid) REFERENCES TICKET (message_uuid)
 );
 
-INSERT INTO TICKET (message_uuid, subject, message, sender_email)
-VALUES (
-           '5da1d172-43a7-4af1-bdc7-ad03c7fd6ef8',
-           'Something is not quite right',
-           'Lorem ipsum muspi meroL',
-           'jan@example.com'
-       );
+CREATE TABLE IF NOT EXISTS LATEST_PROCESSED_MAIL_TICKET
+(
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    arrive_date TIMESTAMP NOT NULL
+);
+
 
 INSERT INTO TICKET (message_uuid, subject, message, sender_email)
-VALUES (
-           'aa07eb65-e09e-463b-b5d4-397d56701054',
-           'Angry bird',
-           'Lorem ipsum muspi meroL Lorem ipsum muspi meroL Lorem ipsum muspi meroL',
-           'IAN_nepo@example.com'
-       );
+VALUES ('5da1d172-43a7-4af1-bdc7-ad03c7fd6ef8',
+        'Something is not quite right',
+        'Lorem ipsum muspi meroL',
+        'jan@example.com');
 
 INSERT INTO TICKET (message_uuid, subject, message, sender_email)
-VALUES (
-           '1cccd172-4ds7-2221-3fg7-ad03c7f12345',
-           'Something is not quite right',
-           'Pardon my delay, I\'m navigating -> MY HEAD!',
-           'pudzian@example.com'
-       );
+VALUES ('aa07eb65-e09e-463b-b5d4-397d56701054',
+        'Angry bird',
+        'Lorem ipsum muspi meroL Lorem ipsum muspi meroL Lorem ipsum muspi meroL',
+        'IAN_nepo@example.com');
+
+INSERT INTO TICKET (message_uuid, subject, message, sender_email)
+VALUES ('1cccd172-4ds7-2221-3fg7-ad03c7f12345',
+        'Something is not quite right',
+        'Pardon my delay, I\'m navigating -> MY HEAD!',
+        'pudzian@example.com');
 
 INSERT INTO TICKET_FILE (message_uuid, file_path, file_name, file_type)
-VALUES (
-           '5da1d172-43a7-4af1-bdc7-ad03c7fd6ef8',
-           '/home/dir/',
-           'test.eml',
-           'EML'
-       );
+VALUES ('5da1d172-43a7-4af1-bdc7-ad03c7fd6ef8',
+        '/home/dir/',
+        'test.eml',
+        'EML');

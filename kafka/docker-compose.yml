@@ -83,6 +83,18 @@ services:
       - kafka3
     networks:
       - kafka_network
+  maildev:
+    image: maildev/maildev:2.0.5
+    container_name: maildev
+    ports:
+      - "1080:1080"  # Web Interface
+      - "1025:1025"  # SMTP Port
+      - "1099:1099"
+    environment:
+      - MAILDEV_WEB_PORT=1080
+      - MAILDEV_SMTP_PORT=1025
+      - MAILDEV_API_PORT=1099
+    restart: unless-stopped
 
 volumes:
   kafka_data1:
