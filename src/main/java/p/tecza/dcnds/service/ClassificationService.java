@@ -3,12 +3,16 @@ package p.tecza.dcnds.service;
 import kotlin.Pair;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import p.tecza.dcnds.external.ClassificationGateway;
+import p.tecza.dcnds.external.dto.TicketContentDTO;
+import p.tecza.dcnds.external.dto.TicketDTO;
 import p.tecza.dcnds.infrastructure.TicketClassificationMapper;
 import p.tecza.dcnds.model.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,18 @@ public class ClassificationService {
 
   @Value("${dcnds-net.classify.resolve-threshold}")
   private double resolveThreshold;
+
+  public List<TicketDTO> fetchTicketClassificationBetweenDates(LocalDateTime from, LocalDateTime to) {
+    List<TicketDTO> res = this.ticketClassificationMapper.fetchTicketClassificationBetweenDates(
+      from, to
+    );
+    return res;
+  }
+
+  public TicketContentDTO fetchTicketContent(String ticketId) {
+    TicketContentDTO res = this.ticketClassificationMapper.fetchTicketContent(ticketId);
+    return res;
+  }
 
   /**
    * Use for batch processing, out of message queue scope.
