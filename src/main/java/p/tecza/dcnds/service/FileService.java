@@ -1,7 +1,12 @@
 package p.tecza.dcnds.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import p.tecza.dcnds.infrastructure.TicketMapper;
+import p.tecza.dcnds.infrastructure.kafka.KafkaTicketProducer;
 import p.tecza.dcnds.model.TextTicket;
+import p.tecza.dcnds.model.TicketModel;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +17,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
+@RequiredArgsConstructor
 public class FileService {
+
+  private final EMLParser emlParser;
+  private final KafkaTicketProducer kafkaTicketProducer;
+  private final TicketMapper ticketMapper;
 
   public void saveToFile(TextTicket ticket) throws IOException {
     String filename = "ticket_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".txt";
@@ -28,6 +38,12 @@ public class FileService {
     );
 
     Files.write(path, content.getBytes(), StandardOpenOption.CREATE);
+  }
+
+  public void createTicketBasedOnEmlFile(MultipartFile file) {
+    TicketModel model = this.emlParser.createTicketModelFromEmlFile(file);
+    this.ticketMapper.insertTicket(model);
+    this.kafkaTicketProducer.publishTicket(model);
   }
 
 }
